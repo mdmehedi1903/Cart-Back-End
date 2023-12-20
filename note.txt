@@ -1,0 +1,7 @@
+You must add .env file to configure port and datababse
+DATABASE_NAME = "PROJECT-NAME"
+DATABASE = "mongodb://localhost:27017"
+RUNNING_PORT = 5050
+
+MONGODB_USER_NAME = 
+MONGODB_USER_PASSWORD = 
