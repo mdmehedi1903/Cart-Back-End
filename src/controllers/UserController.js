@@ -100,8 +100,22 @@ exports.VerifyLogin = async (req, res) => {
 
 
 
-
-
+exports.CreateUser = async (req, res) => {
+    const reqBody = req.body;
+    let code = Math.floor(1000 + Math.random() * 9000);
+    const email = reqBody['useremail'];
+    let EmailText = `4 Digit Verification Code has been sent! (${code})`;
+    let EmailSubject="MERN Cart Verification";
+  
+    try {
+        await OTPModel.updateOne({useremail: email}, {$set: {otp: code}}, {upsert:true})
+        await SendEmailUtility(email,EmailText,EmailSubject);
+        return res.status(201).json({ status: "Success", msg:EmailText });
+    } catch (err) {
+        res.status(400).json({ status: "Failed", data: err });
+    }
+  };
+   
 
 
 
@@ -113,24 +127,5 @@ exports.VerifyLogin = async (req, res) => {
 
 
    
-exports.CreateUser = async (req, res) => {
-    const reqBody = req.body;
-    let code = Math.floor(1000 + Math.random() * 9000);
-    const email = reqBody['useremail'];
-    let EmailText = `4 Digit Verification Code has been sent! (${code})`;
-    let EmailSubject="MERN Cart Verification";
-  
-    const postBody = {
-        useremail: email,
-        otp: code
-    }
 
-    try {
-        await OTPModel.updateOne(postBody, {$set: postBody}, {upsert:true})
-        await SendEmailUtility(email,EmailText,EmailSubject);
-        return res.status(201).json({ status: "Success", msg:EmailText });
-    } catch (err) {
-        res.status(400).json({ status: "Failed", data: err });
-    }
-  };
    
